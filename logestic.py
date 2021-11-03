@@ -4,20 +4,31 @@ import numpy as np
 
 def main():
     train_data = read('heart_train_csv.csv')
-    for val in train_data: print(val)
-    print('Feature count: ', train_data.shape[1])
     theta = np.random.random(train_data.shape[1])
+    theta = np.matrix(theta)
+    theta = fit_logestic(train_data, theta.transpose(), 0.00001, 1)
 
 
-def fit_logestic():
-    pass
+
+def fit_logestic(x: np.matrix, theta:np.matrix, lr, itirations: int, loss_thresh=0.01):
+    Y = hypo_logestic(x, theta)
+    dJ = (x * (Y - x).transpose()) / x.shape[1]
+    theta = theta - lr*dJ.transpose()
+    # Loss
+    # Break conditions
+    return theta
 
 
 def hypo_logestic(x: np.matrix, theta: np.matrix):
     # Hot path. Maybe inline this to reduce func call overhead.
-    Y = x*theta
-    Y = 1./(1+np.exp(-Y))
+    print(x)
+    print(theta)
+    Y = x * theta
+    print(Y)
+    Y = 1 / (1 + np.matrix(np.exp(-Y))) # TODO: Not correct
+    print(Y)
     return Y
+
 
 def read(filename: str, numeric: bool = True, add_bias=True, skip_first=True):
     data = utils.read_csv_file(filename, skip_first)
@@ -36,8 +47,6 @@ def prepare_data(data: list[list], add_bias: bool = False, numeric: bool = True)
             row.insert(0, 1)  # insert at top of list
     data_mat = np.matrix(data)
     return data_mat
-
-
 
 
 if __name__ == '__main__':
