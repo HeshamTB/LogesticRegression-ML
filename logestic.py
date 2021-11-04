@@ -2,10 +2,10 @@ import math
 
 import utils
 import numpy as np
-from matplotlib import pyplot
 import argparse
 
 _verbose = False
+
 
 def main():
     parse_args()
@@ -28,8 +28,10 @@ def main():
     print(predict)
     # TODO: Find acc, prec, recall, F1
     for i, val in enumerate(predict):
-        if val > 0.5: print('1 ', end='')
-        else: print('0 ', end='')
+        if val > 0.5:
+            print('1 ', end='')
+        else:
+            print('0 ', end='')
         print(int(test_labels[i]))
 
 
@@ -37,13 +39,13 @@ def fit_logestic(x: np.array, y_train: np.array, theta: np.array, lr, itirations
     loss_hist = list()
     for i in range(itirations):
         Y = hypo_logestic(x, theta)
-        #logv('Y '+Y.__str__())
+        # logv('Y '+Y.__str__())
         # dJ = (x * (Y - x).transpose()) / x.shape[1]
         dJ = (np.matmul(np.transpose(x), Y - y_train)) / x.shape[0]
-        logv('grad '+dJ.__str__())
+        logv('grad ' + dJ.__str__())
         theta = theta - lr * dJ.transpose()
         # loss = [loss -sum(log(Y).*trainY + log(1-Y).*(1-trainY))/length(trainX)];
-        loss = -np.sum(y_train * np.log(Y) + (1 - np.log(Y)) * (1 - y_train))/x.shape[0]
+        loss = -np.sum(y_train * np.log(Y) + (1 - np.log(Y)) * (1 - y_train)) / x.shape[0]
         print('Loss ' + loss.__str__())
         # Break conditions
     return theta
@@ -51,10 +53,10 @@ def fit_logestic(x: np.array, y_train: np.array, theta: np.array, lr, itirations
 
 def hypo_logestic(x: np.array, theta: np.array) -> np.array:
     # Hot path. Maybe inline this to reduce func call overhead.
-    logv('x '+x.__str__())
-    logv('theta '+theta.transpose().__str__())
+    logv('x ' + x.__str__())
+    logv('theta ' + theta.transpose().__str__())
     Y = np.matmul(x, theta)
-    logv('Y '+Y.__str__())
+    logv('Y ' + Y.__str__())
     # print('Y ',Y.shape)
     Y = 1 / (1 + np.exp(-Y))
     logv('Y sigmoid ' + Y.__str__())
@@ -84,7 +86,7 @@ def prepare_data(data: list[list], add_bias: bool, numeric: bool = True):
     return data_mat
 
 
-def logv(msg : str):
+def logv(msg: str):
     global _verbose
     if _verbose:
         print(msg)
@@ -97,6 +99,7 @@ def parse_args():
     parser.add_argument("-v", '--verbose', help='be verbose', action='store_true')
     varss = vars(parser.parse_args())
     if varss['verbose']: _verbose = True
+
 
 if __name__ == '__main__':
     exit(main())
