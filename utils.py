@@ -1,4 +1,3 @@
-
 def read_csv_file(filename: str, skip_first: bool) -> list:
     import csv
     data = list()
@@ -21,7 +20,7 @@ def print_feature_indcies(data) -> None:
 
 
 def selected_columns(data: list, columns: list) -> None:
-    columns = set(columns) # Removes duplicates.
+    columns = set(columns)  # Removes duplicates.
     for rowIndex in range(len(data)):
         newRow = list()
         for featureIndex in range(len(data[rowIndex])):
@@ -32,6 +31,7 @@ def selected_columns(data: list, columns: list) -> None:
                     newRow.append(0.0)
         # Replace new row
         data[rowIndex] = newRow
+
 
 def featurescaling(array):
     #  feature scaling
