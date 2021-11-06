@@ -7,7 +7,7 @@ _verbose = False
 
 def main():
     parse_args()
-    #np.random.seed(10)  # Arbitrary seed for reliable testing
+    np.random.seed(10)  # Arbitrary seed for reliable testing
     _scale_factor = 100
     order = 2
     train_data = read('heart_train_csv.csv', cols=list(range(12)), add_bias=True, order=order)
@@ -15,7 +15,7 @@ def main():
     train_data = train_data / _scale_factor
     train_labels = np.squeeze(train_labels)  # remove extra dim
     theta = np.random.random(train_data.shape[1])
-    theta = fit_logestic(train_data, train_labels, theta, 0.000003, 1300)
+    theta = fit_logestic(train_data, train_labels, theta, 0.000003, 1000)
     test_data = read('heart_test_csv.csv', cols=list(range(12)), add_bias=True, order=order)  # Features with bias
     test_data = test_data / _scale_factor
     test_labels = read('heart_test_csv.csv', add_bias=False, cols=[13])
