@@ -16,7 +16,7 @@ def main():
     train_data = train_data / _scale_factor
     train_labels = np.squeeze(train_labels)  # remove extra dim
     theta = np.random.random(train_data.shape[1])
-    theta = fit_logestic(train_data, train_labels, theta, 0.3, 100)
+    theta = fit_logestic(train_data, train_labels, theta, 0.3, 500)
     test_data = read('heart_test_csv.csv', cols=list(range(12)), add_bias=True)  # Features with bias
     test_data = test_data / _scale_factor
     test_labels = read('heart_test_csv.csv', add_bias=False, cols=[13])
@@ -26,13 +26,21 @@ def main():
     print(theta)
     predict = hypo_logestic(test_data, theta)
     print(predict)
-    # TODO: Find acc, prec, recall, F1
+    print(test_labels)
+
+    threshhold = 0.5
+    clamp(predict, threshhold)
+
+    for i in range(len(predict)):
+        print('Pred: %s Actual: %s' % (predict[i], test_labels[i]))
+
+
+def clamp(predict, threshhold):
     for i, val in enumerate(predict):
-        if val > 0.5:
-            print('1 ', end='')
+        if val > threshhold:
+            predict[i] = 1
         else:
-            print('0 ', end='')
-        print(int(test_labels[i]))
+            predict[i] = 0
 
 
 def fit_logestic(x: np.array, y_train: np.array, theta: np.array, lr, itirations: int, loss_thresh=0.01):
