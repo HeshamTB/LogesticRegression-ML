@@ -7,7 +7,7 @@ _verbose = False
 
 def main():
     parse_args()
-    np.random.seed(10)  # Arbitrary seed for reliable testing
+    #np.random.seed(10)  # Arbitrary seed for reliable testing
     _scale_factor = 100
     order = 2
     train_data = read('heart_train_csv.csv', cols=list(range(12)), add_bias=True, order=order)
