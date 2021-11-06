@@ -1,5 +1,3 @@
-import math
-
 import utils
 import numpy as np
 import argparse
@@ -21,9 +19,9 @@ def main():
     test_data = test_data / _scale_factor
     test_labels = read('heart_test_csv.csv', add_bias=False, cols=[13])
     test_labels = np.squeeze(test_labels)
-    print(test_data)
-    print(test_labels.shape)
-    print(theta)
+    # print(test_data)
+    # print(test_labels.shape)
+    # print(theta)
     predict = hypo_logestic(test_data, theta)
     print(predict)
     print(test_labels)
@@ -31,8 +29,16 @@ def main():
     threshhold = 0.5
     clamp(predict, threshhold)
 
-    for i in range(len(predict)):
-        print('Pred: %s Actual: %s' % (predict[i], test_labels[i]))
+    # for i in range(len(predict)):
+    #     print('Pred: %s Actual: %s' % (predict[i], test_labels[i]))
+    true_pos, true_neg, false_pos, false_neg = Distill(predict, test_labels)
+    print(true_pos, true_neg, false_pos, false_neg)
+    print('Accuracy: ', Accuracy(true_positive_count=true_pos, true_negative_count=true_neg, false_positive_count=false_pos, false_negative_count=false_neg))
+    prec = Precision(true_pos, false_pos)
+    print('Precision: ', prec)
+    recall = Recall(true_pos, false_neg)
+    print('Recall: ', recall)
+    print('F1: ', F1(recall, prec))
 
 
 def clamp(predict, threshhold):
@@ -83,38 +89,38 @@ def Distill(predict, test_labels):
     false_negative_count = 0
     for i in range(len(predict)):
         # true positive case
-        if (predict[i] == 1 & test_labels[i] == true):
+        if (predict[i] == 1 and test_labels[i] == true):
             true_positive_count = true_positive_count + 1
 
         # true negative case
-        if (predict[i] == 0 & test_labels[i] == false):
+        if (predict[i] == 0 and test_labels[i] == false):
             true_negative_count = true_negative_count + 1
 
-        # false negative
-        if (predict[i] == 1 & test_labels[i] == false):
-            false_negative_count = false_negative_count + 1
-
-        # false positive
-        if (predict[i] == 0 & test_labels[i] == true):
+        # false pos
+        if (predict[i] == 1 and test_labels[i] == false):
             false_positive_count = false_positive_count + 1
+
+        # false neg
+        if (predict[i] == 0 and test_labels[i] == true):
+            false_negative_count = false_negative_count + 1
 
     return true_positive_count, true_negative_count, false_positive_count, false_negative_count
 
 
 def Accuracy(true_positive_count, true_negative_count, false_positive_count, false_negative_count):
-    accuracy = ((true_positive_count + true_negative_count) / (false_positive_count + false_negative_count)) * 100
+    accuracy = ((true_positive_count + true_negative_count) / (false_positive_count + false_negative_count + true_negative_count + true_positive_count)) * 100.0
 
     return accuracy
 
 
 def Precision(true_positive_count, false_positive_count):
-    precision = (true_positive_count / true_positive_count + false_positive_count) * 100
+    precision = (true_positive_count / (true_positive_count + false_positive_count)) * 100
 
     return precision
 
 
 def Recall(true_positive_count, false_negative_count):
-    recall = (true_positive_count / true_positive_count + false_negative_count) * 100
+    recall = (true_positive_count / (true_positive_count + false_negative_count)) * 100
     return recall
 
 
