@@ -53,3 +53,14 @@ def featurescaling(array):
         biggest_value = 0
         counter_element = counter_element + 1
     return array
+
+
+def raise_order(data: list[list], order: int):
+    data_new = list()
+    for i, row in enumerate(data):
+        new_row = list()
+        for j, elemnt in enumerate(row):
+            for k in range(order):
+                new_row.append(elemnt ** (k+1))
+        data_new.append(new_row)
+    return data_new
