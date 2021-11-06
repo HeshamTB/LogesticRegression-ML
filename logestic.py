@@ -64,6 +64,57 @@ def hypo_logestic(x: np.array, theta: np.array) -> np.array:
     return Y
 
 
+def Distill(predict, test_labels):
+    # for loop the reads the twos array
+    # this method return true positive, true negative, false positive, false negative
+    true = 1
+    false = 0
+    true_positive_count = 0
+    true_negative_count = 0
+    false_positive_count = 0
+    false_negative_count = 0
+    for i in range(len(predict)):
+        # true positive case
+        if (predict[i] == 1 & test_labels[i] == true):
+            true_positive_count = true_positive_count + 1
+
+        # true negative case
+        if (predict[i] == 0 & test_labels[i] == false):
+            true_negative_count = true_negative_count + 1
+
+        # false negative
+        if (predict[i] == 1 & test_labels[i] == false):
+            false_negative_count = false_negative_count + 1
+
+        # false positive
+        if (predict[i] == 0 & test_labels[i] == true):
+            false_positive_count = false_positive_count + 1
+
+    return true_positive_count, true_negative_count, false_positive_count, false_negative_count
+
+
+def Accuracy(true_positive_count, true_negative_count, false_positive_count, false_negative_count):
+    accuracy = ((true_positive_count + true_negative_count) / (false_positive_count + false_negative_count)) * 100
+
+    return accuracy
+
+
+def Precision(true_positive_count, false_positive_count):
+    precision = (true_positive_count / true_positive_count + false_positive_count) * 100
+
+    return precision
+
+
+def Recall(true_positive_count, false_negative_count):
+    recall = (true_positive_count / true_positive_count + false_negative_count) * 100
+    return recall
+
+
+def F1(recall, precision):
+    f1 = 2 * (recall * precision) / (recall + precision)
+    return f1
+
+
 def read(filename: str, add_bias: bool, numeric: bool = True, skip_first=True, cols=None):
     logv('Reading file %s' % filename)
     data = utils.read_csv_file(filename, skip_first)  # Still python list
