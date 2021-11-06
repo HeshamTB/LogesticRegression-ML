@@ -1,0 +1,11 @@
+For order 1 with Learning rate of 0.3 and number of Iterations of 1000
+Accuracy 78.33  Precision 75.75  Recall 83.33  F1 79.36
+
+-------------------------------------------------------------------
+
+For order 2 with Learning rate of 0.000003 and number of Iterations of 1000
+Accuracy 76.667   Precision 75.0  Recall 80  F1 77.41935
+
+-------------------------------------------------------------------
+All with random seed: np.random.seed(10)
+

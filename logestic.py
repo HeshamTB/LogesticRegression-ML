@@ -60,7 +60,7 @@ def fit_logestic(x: np.array, y_train: np.array, theta: np.array, lr, itirations
         logv('grad ' + dJ.__str__())
         theta = theta - lr * dJ.transpose()
         # loss = [loss -sum(log(Y).*trainY + log(1-Y).*(1-trainY))/length(trainX)];
-        loss = -np.sum(y_train * np.log(Y) + (1 - np.log(Y)) * (1 - y_train)) / x.shape[0]
+        loss = -np.sum((y_train * np.log(Y)) + ((1 - np.log(Y)) * (1 - y_train))) / x.shape[0]
         print('Loss ' + loss.__str__())
         # Break conditions
     return theta
